@@ -1,0 +1,22 @@
+Gosper's continued fractions for Python, using lazy evaluation.
+
+Author:
+Marcin Ciura <Marcin.Ciura at polsl.pl>
+
+Web references:
+* Ralph William Gosper, Continued Fractions. In: HAKMEM,
+  http://home.pipeline.com/~hbaker1/hakmem/cf.html
+* Ralph William Gosper, Continued Fraction Arithmetic
+  http://www.tweedledum.com/rwg/cfup.htm
+* Mark Jason Dominus, Arithmetic with Continued Fractions,
+  http://perl.plover.com/yak/cftalk/
+* Jean Vuillemin, Exact Real Computer Arithmetic with Continued Fractions
+  ftp://ftp.inria.fr/INRIA/publication/publi-pdf/RR/RR-0760.pdf
+* Philippe Flajolet, Brigitte Vall\'ee, Ilan Vardi,
+  Continued fractions from Euclid to the present day,
+  http://citeseer.ist.psu.edu/flajolet00continued.html
+
+Changed by Adam Przybyla <adam@ertel.com.pl> 07.09.2011
+- added Python 2.6 math compatibility functions: 
+- ldexp(x,y) frexp(x) fsum(x) isnan(x) isinf(x) atanh(x) copysign(x,y) log1p(x) trunc(x) acosh(x) asinh(x) factorial(x)
+- fixed NaN error
