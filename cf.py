@@ -954,6 +954,12 @@ def ceil(x):
     """Round x up to an integer."""
 
     # TODO: maybe return an int instead of cf?
+    if isinstance(x, float) and str(x)=='inf':
+	return x
+
+    if isinstance(x, float) and str(x)=='-inf':
+	return x
+
     x = cf(x)
     x_floor = x.pq(0)
     if x_floor is None:
@@ -1060,6 +1066,10 @@ def isinf(x):
 
 def atanh(x):
     #1/2*log(1+z/1-z)
+    if x==1 or x==-1:
+	raise ValueError
+    if isnan(x):
+        return x
     return log(unop(cf(x),1,1,-1,1))/2
 
 def copysign(x,y):
@@ -1897,15 +1907,23 @@ def acos(x):
 def atan2(y, x):
     """Return the arc tangent of y/x."""
 
+    if isinstance(x, float) and str(x)=='nan':
+        return float('nan')
     y = cf(y)
     if x > 0:
+        if isinstance(x, float) and str(x)=='inf':
+            return 0.0
         return atan(y/x)
     elif x < 0:
         if y >= 0:
             # Continued fractions don't sport a signed zero,
             # so we always return pi for x<0, y==0.
+            if isinstance(x, float) and str(x)=='-inf':
+                return pi
             return atan(y/x) + pi
         else:
+            if isinstance(x, float) and str(x)=='-inf':
+                return -pi
             return atan(y/x) - pi
     else:
         if y > 0:
@@ -1914,6 +1932,7 @@ def atan2(y, x):
             return -half_pi
         else:
             return zero
+            #return pi
 
 def _cf_pi_generator():
     """Return subsequent partial quotients of pi, using
