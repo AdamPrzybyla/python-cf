@@ -3,7 +3,7 @@ Python IEEE 754 floating point support
 ======================================
 
 >>> from sys import float_info as FI
->>> from math import *
+>>> from cf import *
 >>> PI = pi
 >>> E = e
 
