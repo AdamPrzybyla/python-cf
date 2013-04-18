@@ -603,6 +603,11 @@ class cf(cf_base):
             with initial partial quotients taken from the first
             sequence, followed by a cyclic repetition of the second
             sequence."""
+        #if isinstance(x, float) and isinf(x):
+	#		return x
+
+        if isinstance(x, float) and isnan(x):
+			return cf(())
 
         if isinstance(x, cf_base):
             # Be idempotent.
@@ -1076,10 +1081,18 @@ def trunc(x):
 
 def acosh(x):
     """Return the hyperbolic arc cosine (measured in radians) of x."""
+    if isinstance(x, float) and str(x)=='inf':
+        return x
+    if isinstance(x, float) and str(x)=='-inf':
+	raise ValueError
     return log(x+sqrt((cf(x)**2)-1))
 
 def asinh(x):
     """Return the hyperbolic arc sine (measured in radians) of x."""
+    if isinstance(x, float) and str(x)=='-inf':
+        return x
+    if isinstance(x, float) and str(x)=='inf':
+        return x
     return log(x+sqrt((cf(x)**2)+1))
 
 def factorial(x):
@@ -1841,7 +1854,10 @@ class _cf_atan(cf_base):
 
 def atan(x):
     """Return the arc tangent of x."""
-
+    if isinstance(x, float) and str(x)=='inf':
+        return half_pi
+    if isinstance(x, float) and str(x)=='-inf':
+        return -half_pi
     x = cf(x)
     if x.pq(0) is None:
         return NaN
