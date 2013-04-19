@@ -1993,6 +1993,27 @@ def atan2(y, x):
 
     if isinstance(x, float) and str(x)=='nan':
         return float('nan')
+    if isinstance(y, float) and str(y)=='nan':
+        return float('nan')
+    if isinstance(y, float) and str(y)=='inf':
+        if isinstance(x, float) and str(x)=='-inf':
+             return (pi*3)/4
+	else:
+             if isinstance(x, float) and str(x)=='inf':
+                 return pi/4
+	     else:
+                 return half_pi
+    else:
+        if isinstance(y, float) and str(y)=='-inf':
+            if isinstance(x, float) and str(x)=='-inf':
+                 return -(pi*3)/4
+	    else:
+	         if isinstance(x, float) and str(x)=='inf':
+                       return -pi/4
+	         else:
+                       return -half_pi
+		
+        
     y = cf(y)
     if x > 0:
         if isinstance(x, float) and str(x)=='inf':

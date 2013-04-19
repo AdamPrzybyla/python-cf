@@ -145,7 +145,6 @@ class MathTests(unittest.TestCase):
         self.assertEqual(math.atan2(-0., INF), -0.)
         self.assert_(math.isnan(math.atan2(-0., NAN)))
         # math.atan2(INF, x)
-        return
         self.ftest('atan2(inf, -inf)', math.atan2(INF, NINF), math.pi*3/4)
         self.ftest('atan2(inf, -2.3)', math.atan2(INF, -2.3), math.pi/2)
         self.ftest('atan2(inf, -0.)', math.atan2(INF, -0.0), math.pi/2)
