@@ -603,7 +603,7 @@ class cf(cf_base):
             with initial partial quotients taken from the first
             sequence, followed by a cyclic repetition of the second
             sequence."""
-        #if isinstance(x, float) and isinf(x):
+        #if isinstance(x, float) and str(x)=='inf':
 	#		return x
 
         if isinstance(x, float) and isnan(x):
@@ -947,8 +947,10 @@ def digits(x, base=10):
 def floor(x):
     """Round x down to an integer."""
 
+    if str(x)=='nan' or str(x)=='nan':
+	return float('nan')
     # TODO: do we need to return a cf instead of int?
-    return cf(x).pq(0)
+    return float(cf(x).pq(0))
 
 def ceil(x):
     """Round x up to an integer."""
@@ -1037,6 +1039,29 @@ def _cf_ipow(x, n):
 def pow(x, y):
     """Raise x to the yth power."""
 
+    if isinstance(x, float) and str(x)=='inf':
+	if y==0:
+		return 1.0
+	else:
+		if y<0:
+			return 0.0
+		else:
+			if str(y)=='nan':
+				return y
+			else:
+	        		return x
+    if isinstance(y, float) and str(y)=='nan' and x==1:
+        return 1.0
+    if isinstance(y, float) and str(y)=='-inf' and x==1:
+        return 1.0
+    if isinstance(y, float) and str(y)=='inf' and x==1:
+        return 1.0
+    if isinstance(x, float) and str(x)=='-inf':
+        return x
+    if x==0 and y>0 and not str(y)=='nan':
+	return 0
+    if x==0 and y<0 and not str(y)=='nan':
+	raise ValueError
     return cf(x)**y
 
 def ldexp(x,y):
@@ -1068,7 +1093,10 @@ def isnan(x):
     return not x==x
 
 def isinf(x):
-    if str(cf(x))=="NaN" and x==x:
+    if str(x)=="inf" or str(x)=="-inf":
+        return True
+
+    if str(cf(x))=="nan" and x==x:
         return True
     else:
         return False
@@ -1115,11 +1143,13 @@ def asinh(x):
     return log(x+sqrt((cf(x)**2)+1))
 
 def factorial(x):
+    if x<0 or int(x)!=x:
+	raise ValueError
     if x==1 or x==0:
         return 1
     else:
         import operator
-        return reduce(operator.mul,(k for k in range(1,1+x)))
+        return reduce(operator.mul,(k for k in range(1,1+int(x))))
 
 def _cf_isqrt(x):
     """Calculate an integer approximation of square root of x."""
@@ -1589,6 +1619,14 @@ def cosh(x):
 
 def tanh(x):
     """Return the hyperbolic tangent of x."""
+    if isinstance(x, float) and str(x)=='inf':
+        return 1
+
+    if isinstance(x, float) and str(x)=='-inf':
+        return -1
+
+    if isinstance(x, float) and str(x)=='nan':
+        return x
 
     # return (exp(x) - exp(-x))/(exp(x) + exp(-x))
     return binop(exp(x), exp(-x), 0, 1, -1, 0, 0, 1, 1, 0)
