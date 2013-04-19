@@ -1041,6 +1041,13 @@ def pow(x, y):
 
 def ldexp(x,y):
     """'ldexp(x, i) -> x * (2**i)'"""
+
+    if isinstance(x, float) and str(x)=='inf':
+        return x
+    if isinstance(x, float) and str(x)=='-inf':
+        return x
+    if x==0:
+	return x
     return cf(x)*(cf(2)**y)
 
 def frexp(x):
@@ -1200,6 +1207,12 @@ class sqrt(cf_base):
 
 def hypot(x, y):
     """Return the Euclidean norm of (x, y)."""
+    if str(x)=='inf' or str(x)=='-inf':
+	return float('inf')
+    if str(y)=='inf' or str(y)=='-inf':
+	return float('inf')
+    if str(y)=='nan' or str(x)=='nan':
+	return float('nan')
 
     return sqrt(x*x + y*y)
 
@@ -1463,6 +1476,10 @@ class log(cf_base):
             return log(x)/log(base)
         if isinstance(x, cf_base) and (x.pq(0) is None):
             return NaN
+        if isinstance(x, float) and str(x)=='inf':
+            return x
+        if isinstance(x, float) and str(x)=='nan':
+            return x
         if x <= 0:
             raise (ValueError,
                 'the logarithm of a non-positive number cannot be computed')
@@ -1555,6 +1572,9 @@ def log10(x):
 
 def sinh(x):
     """Return the hyperbolic sine of x."""
+
+    if isinstance(x, float) and ( str(x)=='inf' or str(x)=='-inf'):
+        return x
 
     # return (exp(x) - exp(-x))/2
     return binop(exp(x), exp(-x), 0, 1, -1, 0, 0, 0, 0, 2)
@@ -1730,6 +1750,8 @@ class _cf_tan(cf_base):
 def tan(x):
     """Return the tangent of x."""
 
+    if isinstance(x, float) and str(x)=='nan':
+        return NaN
     octant = x//quarter_pi
     reduced_octant = octant%4
     if reduced_octant < 2:
