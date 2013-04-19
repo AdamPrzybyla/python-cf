@@ -993,6 +993,12 @@ def modf(x):
 
     # TODO: maybe return an int instead of cf
     # as the integer part?
+    if isinstance(x, float) and str(x)=='inf':
+	return (0.0,x)
+    if isinstance(x, float) and str(x)=='-inf':
+	return (-0.0,x)
+    if isinstance(x, float) and str(x)=='nan':
+	return (x,x)
     integer = int(x)
     return (cf(x)-integer, cf(integer))
 
@@ -1087,6 +1093,8 @@ def frexp(x):
 
 def fsum(x):
     """Return an accurate sum of values in the iterable."""   
+    if not x:
+	return 0.0
     return reduce(lambda k1,k2: cf(k1)+k2,x)
 
 def isnan(x):
@@ -1176,6 +1184,10 @@ class sqrt(cf_base):
         if x == 0:
             # Newton's method doesn't work for x == 0.
             return zero
+        if isinstance(x, float) and str(x)=='inf':
+	    return x
+        if isinstance(x, float) and str(x)=='nan':
+	    return x
         self = object.__new__(cls)
         if isinstance(x, (int, long)):
             # Precompute self.plain as the integer approximation
