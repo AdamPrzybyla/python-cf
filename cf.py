@@ -977,6 +977,8 @@ def fabs(x):
 def fmod(x, y):
     """Return the remainder of x divided by y,
     with the same sign as x."""
+    if y==0 or str(x)=='inf' or str(x)=='-inf':
+        raise ValueError
 
     if x*y > 0:
         return x%y

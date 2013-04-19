@@ -335,7 +335,7 @@ class MathTests(unittest.TestCase):
         self.assertRaises(TypeError, math.floor, t)
         self.assertRaises(TypeError, math.floor, t, 0)
 
-    def skip_testFmod(self):
+    def testFmod(self):
         self.assertRaises(TypeError, math.fmod)
         self.ftest('fmod(10,1)', math.fmod(10,1), 0)
         self.ftest('fmod(10,0.5)', math.fmod(10,0.5), 0)
