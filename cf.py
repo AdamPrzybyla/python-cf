@@ -1059,7 +1059,7 @@ def isnan(x):
     return not x==x
 
 def isinf(x):
-    if str(cf.cf(x))=="NaN" and x==x:
+    if str(cf(x))=="NaN" and x==x:
         return True
     else:
         return False
@@ -1555,6 +1555,8 @@ def sinh(x):
 
 def cosh(x):
     """Return the hyperbolic cosine of x."""
+    if isinstance(x, float) and ( str(x)=='inf' or str(x)=='-inf'):
+        return float('inf')
 
     # return (exp(x) + exp(-x))/2
     return binop(exp(x), exp(-x), 0, 1, 1, 0, 0, 0, 0, 2)
@@ -1738,12 +1740,16 @@ def tan(x):
 def sin(x):
     """Return the sine of x."""
 
+    if isinstance(x, float) and str(x)=='nan':
+        return x
     # return (2*tan(x/2))/(1+tan(x/2)**2)
     tangent = tan(x/2)
     return binop(tangent, tangent, 0, 2, 0, 0, 1, 0, 0, 1)
 
 def cos(x):
     """Return the cosine of x."""
+    if isinstance(x, float) and str(x)=='nan':
+        return x
 
     # return (1-tan(x/2)**2)/(1+tan(x/2)**2)
     tangent = tan(x/2)
