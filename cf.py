@@ -1315,6 +1315,10 @@ class exp(cf_base):
         if isinstance(x, (int,long)):
             # Fast track for integer exponents.
             return _cf_iexp(x)
+        if isinstance(x, float) and str(x)=='inf':
+            return x
+        if isinstance(x, float) and str(x)=='-inf':
+            return 0.0
         x = cf(x)
         exponent = x.pq(0)
         if exponent is None:

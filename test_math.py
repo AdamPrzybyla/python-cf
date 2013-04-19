@@ -273,7 +273,7 @@ class MathTests(unittest.TestCase):
         self.ftest('degrees(pi/2)', math.degrees(math.pi/2), 90.0)
         self.ftest('degrees(-pi/4)', math.degrees(-math.pi/4), -45.0)
 
-    def skip_testExp(self):
+    def testExp(self):
         self.assertRaises(TypeError, math.exp)
         self.ftest('exp(-1)', math.exp(-1), 1/math.e)
         self.ftest('exp(0)', math.exp(0), 1)
