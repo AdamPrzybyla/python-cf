@@ -1081,19 +1081,25 @@ def pow(x, y):
         if y%2==1.0:
              return -1.0
 
-    if isinstance(y, float) and str(y)=='nan' and x==1:
-        return 1.0
+    if isinstance(y, float) and str(y)=='nan':
+	if x==1:
+            return 1.0
+        else:
+            return float('nan')
     if isinstance(y, float) and str(y)=='-inf' and x==1:
         return 1.0
     if isinstance(y, float) and str(y)=='inf' and x==1:
         return 1.0
-    if isinstance(y, float) and str(y)=='-inf' and x!=0:
+    if isinstance(y, float) and str(y)=='-inf':# and x!=0:
+	if x==0:
+            raise ValueError,"math domain error"
         if abs(x)<1:
             return -y
         else:
             return 0.0
-    if isinstance(y, float) and str(y)=='inf' and x!=0:
-        if abs(x)<1:
+
+    if isinstance(y, float) and str(y)=='inf':# and x!=0:
+        if abs(x)<=1:
             return 0.0
         else:
             return y
@@ -1173,10 +1179,14 @@ def acosh(x):
         return x
     if isinstance(x, float) and str(x)=='-inf':
 	raise ValueError
+    if isinstance(x, float) and str(x)=='nan':
+        return float('nan')
     return log(x+sqrt((cf(x)**2)-1))
 
 def asinh(x):
     """Return the hyperbolic arc sine (measured in radians) of x."""
+    if isinstance(x, float) and str(x)=='nan':
+        return float('nan')
     if isinstance(x, float) and str(x)=='-inf':
         return x
     if isinstance(x, float) and str(x)=='inf':
@@ -1834,7 +1844,12 @@ def tan(x):
     """Return the tangent of x."""
 
     if isinstance(x, float) and str(x)=='nan':
-        return NaN
+        #return NaN
+        return float('nan')
+    if isinstance(x, float) and str(x)=='inf':
+        raise ValueError,"math domain error"
+    if isinstance(x, float) and str(x)=='-inf':
+        raise ValueError,"math domain error"
     octant = x//quarter_pi
     reduced_octant = octant%4
     if reduced_octant < 2:
@@ -1853,6 +1868,10 @@ def sin(x):
 
     if isinstance(x, float) and str(x)=='nan':
         return x
+    if isinstance(x, float) and str(x)=='inf':
+        raise ValueError,"math domain error"
+    if isinstance(x, float) and str(x)=='-inf':
+        raise ValueError,"math domain error"
     # return (2*tan(x/2))/(1+tan(x/2)**2)
     tangent = tan(x/2)
     return binop(tangent, tangent, 0, 2, 0, 0, 1, 0, 0, 1)
@@ -1862,6 +1881,10 @@ def cos(x):
     if isinstance(x, float) and str(x)=='nan':
         return x
 
+    if isinstance(x, float) and str(x)=='inf':
+        raise ValueError,"math domain error"
+    if isinstance(x, float) and str(x)=='-inf':
+        raise ValueError,"math domain error"
     # return (1-tan(x/2)**2)/(1+tan(x/2)**2)
     tangent = tan(x/2)
     return binop(tangent, tangent, -1, 0, 0, 1, 1, 0, 0, 1)
@@ -1985,6 +2008,8 @@ def atan(x):
         return half_pi
     if isinstance(x, float) and str(x)=='-inf':
         return -half_pi
+    if isinstance(x, float) and str(x)=='nan':
+        return float('nan')
     x = cf(x)
     if x.pq(0) is None:
         return NaN
@@ -2002,6 +2027,12 @@ def atan(x):
 def asin(x):
     """Return the arc sine of x."""
 
+    if isinstance(x, float) and str(x)=='-inf':
+         raise ValueError,"math domain error"
+    if isinstance(x, float) and str(x)=='inf':
+         raise ValueError,"math domain error"
+    if isinstance(x, float) and str(x)=='nan':
+        return float('nan')
     x1 = cf(x)
     if x1.pq(0) is None:
         return NaN
@@ -2019,6 +2050,12 @@ def asin(x):
 def acos(x):
     """Return the arc cosine of x."""
 
+    if isinstance(x, float) and str(x)=='-inf':
+         raise ValueError,"math domain error"
+    if isinstance(x, float) and str(x)=='inf':
+         raise ValueError,"math domain error"
+    if isinstance(x, float) and str(x)=='nan':
+        return float('nan')
     return half_pi - asin(x)
 
 def atan2(y, x):
