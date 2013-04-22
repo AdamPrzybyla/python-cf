@@ -622,7 +622,6 @@ class MathTests(unittest.TestCase):
         self.assertRaises(ValueError, math.pow, -0., -3.)
         self.assertRaises(ValueError, math.pow, -0., NINF)
         self.assert_(math.isnan(math.pow(-0., NAN)))
-	return
 
         # pow(NINF, x)
         self.assertEqual(math.pow(NINF, INF), INF)
@@ -637,6 +636,7 @@ class MathTests(unittest.TestCase):
         self.assertEqual(math.pow(NINF, NINF), 0.)
         self.assert_(math.isnan(math.pow(NINF, NAN)))
 
+        return
         # pow(-1, x)
         self.assertEqual(math.pow(-1., INF), 1.)
         self.assertEqual(math.pow(-1., 3.), -1.)
