@@ -1045,10 +1045,10 @@ def _cf_ipow(x, n):
 def pow(x, y):
     """Raise x to the yth power."""
 
-    if isinstance(x, float) and str(x)=='inf':
-	if y==0:
-		return 1.0
-	else:
+    if y==0:
+        return 1.0
+    else:
+          if isinstance(x, float) and str(x)=='inf':
 		if y<0:
 			return 0.0
 		else:
@@ -1070,6 +1070,17 @@ def pow(x, y):
 	        		    return x
 				else:
 				    return -x
+
+    if x==-1 and isinstance(y, float):
+        if str(y)=='inf':
+             return 1.0
+        if str(y)=='-inf':
+             return 1.0
+        if y%2==0:
+             return 1.0
+        if y%2==1.0:
+             return -1.0
+
     if isinstance(y, float) and str(y)=='nan' and x==1:
         return 1.0
     if isinstance(y, float) and str(y)=='-inf' and x==1:
