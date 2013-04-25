@@ -2100,6 +2100,8 @@ def atan2(y, x):
                        return -half_pi
 		
         
+    s=copysign(1,y)
+    sx=copysign(1,x)
     y = cf(y)
     if x > 0:
         if isinstance(x, float) and str(x)=='inf':
@@ -2110,8 +2112,12 @@ def atan2(y, x):
             # Continued fractions don't sport a signed zero,
             # so we always return pi for x<0, y==0.
             if isinstance(x, float) and str(x)=='-inf':
-                return pi
-            return atan(y/x) + pi
+                if s>0:
+                     return pi
+                else:
+                     return -pi
+
+            return atan(y/x) + pi*s
         else:
             if isinstance(x, float) and str(x)=='-inf':
                 return -pi
@@ -2122,8 +2128,11 @@ def atan2(y, x):
         elif y < 0:
             return -half_pi
         else:
-            return zero
-            #return pi
+            if sx>0:
+                return zero
+            if s<0:
+                return -pi
+            return pi
 
 def _cf_pi_generator():
     """Return subsequent partial quotients of pi, using
