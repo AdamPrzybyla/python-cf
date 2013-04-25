@@ -1170,7 +1170,9 @@ def atanh(x):
 
 def copysign(x,y):
     """Return x with the sign of y."""
-    #if ((y.pq(0) is None) or (y.pq(0) >= 0))^((x.pq(0) is None) or (x.pq(0) >= 0)):
+    if y==0 and str(y)[0]=='-':
+	y=-1
+
     if (y<0)^(x<0):
         return -x
     else:

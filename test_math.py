@@ -4,7 +4,6 @@
 
 from test.test_support import run_unittest, verbose
 import unittest
-#import math
 import cf as math
 import os
 import sys
@@ -216,16 +215,16 @@ class MathTests(unittest.TestCase):
             self.assertEqual(math.copysign(0., 42), 0.0)
             self.assertEqual(math.copysign(1., -42), -1.0)
             self.assertEqual(math.copysign(3, 0.), 3.0)
-            ###self.assertEqual(math.copysign(4., -0.), -4.0)
+            self.assertEqual(math.copysign(4., -0.), -4.0)
 
             self.assertRaises(TypeError, math.copysign)
             # copysign should let us distinguish signs of zeros
             self.assertEquals(math.copysign(1., 0.), 1.)
-            ###self.assertEquals(math.copysign(1., -0.), -1.)
+            self.assertEquals(math.copysign(1., -0.), -1.)
             self.assertEquals(math.copysign(INF, 0.), INF)
-            ###self.assertEquals(math.copysign(INF, -0.), NINF)
+            self.assertEquals(math.copysign(INF, -0.), NINF)
             self.assertEquals(math.copysign(NINF, 0.), INF)
-            ###self.assertEquals(math.copysign(NINF, -0.), NINF)
+            self.assertEquals(math.copysign(NINF, -0.), NINF)
             # and of infinities
             self.assertEquals(math.copysign(1., INF), 1.)
             self.assertEquals(math.copysign(1., NINF), -1.)
@@ -240,7 +239,7 @@ class MathTests(unittest.TestCase):
             # copysign(INF, NAN) may be INF or it may be NINF, since
             # we don't know whether the sign bit of NAN is set on any
             # given platform.
-            ###self.assertTrue(math.isinf(math.copysign(INF, NAN)))
+            self.assertTrue(math.isinf(math.copysign(INF, NAN)))
             # similarly, copysign(2., NAN) could be 2. or -2.
             self.assertEquals(abs(math.copysign(2., NAN)), 2.)
 
