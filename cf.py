@@ -20,7 +20,7 @@ Web references:
 
 Changed by Adam Przybyla <adam@ertel.com.pl> 07.09.2011
 - added Python 2.6 math compatibility functions: 
-- ldexp(x,y) frexp(x) fsum(x) isnan(x) isinf(x) atanh(x) copysign(x,y) log1p(x) trunc(x) acosh(x) asinh(x) factorial(x)
+- ldexp(x,y) frexp(x) fsum(x) isnan(x) isinf(x) atanh(x) copysign(x,y) log3p(x) trunc(x) acosh(x) asinh(x) factorial(x)
 - fixed NaN error
 """
 
@@ -1124,12 +1124,24 @@ def frexp(x):
     """Return the mantissa and exponent of x, as pair (m, e).
     m is a float and e is an int, such that x = m * 2.**e.
     If x is 0, m and e are both 0.  Else 0.5 <= abs(m) < 1.0."""
+    if isinstance(x, float) and str(x)=='inf':
+        return [x,x]
+    if isinstance(x, float) and str(x)=='-inf':
+        return [x,x]
     if x==0 or x==0.0:
-        return [0,0]
+        return [0.0,0]
     else:
+	z=-1.0
+	if x>0:
+            z=1.0
+        x=abs(x)
 	p=ceil(log(cf(x))/log_of_2)
-	return  [ x/(2**p),p] 
-
+	m=x/(2**p)
+	if m==1:
+	    return [z*0.5, p+1]
+	else:
+            return  [ z*m,p] 
+		
 def fsum(x):
     """Return an accurate sum of values in the iterable."""   
     if not x:

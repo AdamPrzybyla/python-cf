@@ -365,13 +365,13 @@ class MathTests(unittest.TestCase):
                 self.fail('%s returned %r, expected %r'%\
                           (name, (mant, exp), (emant,eexp)))
 
-        ###testfrexp('frexp(-1)', math.frexp(-1), (-0.5, 1))
+        testfrexp('frexp(-1)', math.frexp(-1), (-0.5, 1))
         testfrexp('frexp(0)', math.frexp(0), (0, 0))
-        ###testfrexp('frexp(1)', math.frexp(1), (0.5, 1))
-        ###testfrexp('frexp(2)', math.frexp(2), (0.5, 2))
+        testfrexp('frexp(1)', math.frexp(1), (0.5, 1))
+        testfrexp('frexp(2)', math.frexp(2), (0.5, 2))
 
-        ###self.assertEquals(math.frexp(INF)[0], INF)
-        ###self.assertEquals(math.frexp(NINF)[0], NINF)
+        self.assertEquals(math.frexp(INF)[0], INF)
+        self.assertEquals(math.frexp(NINF)[0], NINF)
         self.assert_(math.isnan(math.frexp(NAN)[0]))
 
     def testFsum(self):
