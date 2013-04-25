@@ -1697,6 +1697,8 @@ def tanh(x):
     if isinstance(x, float) and str(x)=='nan':
         return x
 
+    if x==0:
+	return x
     # return (exp(x) - exp(-x))/(exp(x) + exp(-x))
     return binop(exp(x), exp(-x), 0, 1, -1, 0, 0, 1, 1, 0)
 

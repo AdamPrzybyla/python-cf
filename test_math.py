@@ -775,10 +775,10 @@ class MathTests(unittest.TestCase):
         self.ftest('tanh(-inf)', math.tanh(NINF), -1)
         self.assert_(math.isnan(math.tanh(NAN)))
         # check that tanh(-0.) == -0. on IEEE 754 systems
-        ###if float.__getformat__("double").startswith("IEEE"):
-            ###self.assertEqual(math.tanh(-0.), -0.)
-            ###self.assertEqual(math.copysign(1., math.tanh(-0.)),
-              ###               math.copysign(1., -0.))
+        if float.__getformat__("double").startswith("IEEE"):
+            self.assertEqual(math.tanh(-0.), -0.)
+            self.assertEqual(math.copysign(1., math.tanh(-0.)),
+                             math.copysign(1., -0.))
 
     def test_trunc(self):
         self.assertEqual(math.trunc(1), 1)
