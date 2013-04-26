@@ -1187,7 +1187,10 @@ def log1p(x):
 
 def trunc(x):
     """Truncates x to the nearest Integral toward 0. Uses the __trunc__ magic method."""
-    return int(x)
+    try:
+        return x.__trunc__()
+    except:
+        raise AttributeError
 
 def acosh(x):
     """Return the hyperbolic arc cosine (measured in radians) of x."""

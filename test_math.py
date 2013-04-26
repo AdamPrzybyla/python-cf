@@ -804,11 +804,11 @@ class MathTests(unittest.TestCase):
         self.assertRaises(TypeError, math.trunc)
         self.assertRaises(TypeError, math.trunc, 1, 2)
         # XXX: This is not ideal, but see the comment in math_trunc().
-        ###self.assertRaises(AttributeError, math.trunc, TestNoTrunc())
+        self.assertRaises(AttributeError, math.trunc, TestNoTrunc())
 
         t = TestNoTrunc()
         t.__trunc__ = lambda *args: args
-        ###self.assertEquals((), math.trunc(t))
+        self.assertEquals((), math.trunc(t))
         self.assertRaises(TypeError, math.trunc, t, 0)
 
     def testIsnan(self):
