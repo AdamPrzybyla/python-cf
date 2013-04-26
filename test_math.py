@@ -501,14 +501,16 @@ class MathTests(unittest.TestCase):
         for n in [10**5, 10L**5, 10**10, 10L**10, 10**20, 10**40]:
             self.assertEquals(math.ldexp(INF, -n), INF)
             self.assertEquals(math.ldexp(NINF, -n), NINF)
-            ###self.assertEquals(math.ldexp(1., -n), 0.)
-            ###self.assertEquals(math.ldexp(-1., -n), -0.)
+            #cf doesn't return 0/-0 
+            #self.assertEquals(math.ldexp(1., -n), 0.)
+            #self.assertEquals(math.ldexp(-1., -n), -0.)
             self.assertEquals(math.ldexp(0., -n), 0.)
             self.assertEquals(math.ldexp(-0., -n), -0.)
             self.assert_(math.isnan(math.ldexp(NAN, -n)))
 
-            ###self.assertRaises(OverflowError, math.ldexp, 1., n)
-            ###self.assertRaises(OverflowError, math.ldexp, -1., n)
+            #cf doesn't raise exceptions
+            #self.assertRaises(OverflowError, math.ldexp, 1., n)
+            #self.assertRaises(OverflowError, math.ldexp, -1., n)
             self.assertEquals(math.ldexp(0., n), 0.)
             self.assertEquals(math.ldexp(-0., n), -0.)
             self.assertEquals(math.ldexp(INF, n), INF)
