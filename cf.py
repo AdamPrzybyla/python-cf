@@ -651,6 +651,8 @@ class cf(cf_base):
             if y is None:
                 y = 1
             self.cache = []
+            if not isinstance(x,(float,int)):
+                x=float(x)
             self.next_pq = ratio(x, y).next
         return self
 

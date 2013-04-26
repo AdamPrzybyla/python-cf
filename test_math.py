@@ -201,7 +201,7 @@ class MathTests(unittest.TestCase):
                 return 41.3
         class TestNoCeil(object):
             pass
-        ###self.ftest('ceil(TestCeil())', math.ceil(TestCeil()), 42)
+        self.ftest('ceil(TestCeil())', math.ceil(TestCeil()), 42)
         self.assertRaises(TypeError, math.ceil, TestNoCeil())
 
         t = TestNoCeil()
@@ -325,7 +325,7 @@ class MathTests(unittest.TestCase):
                 return 42.3
         class TestNoFloor(object):
             pass
-        ###self.ftest('floor(TestFloor())', math.floor(TestFloor()), 42)
+        self.ftest('floor(TestFloor())', math.floor(TestFloor()), 42)
         self.assertRaises(TypeError, math.floor, TestNoFloor())
 
         t = TestNoFloor()
