@@ -491,8 +491,9 @@ class MathTests(unittest.TestCase):
         #self.assertRaises(OverflowError, math.ldexp, -1., 1000000)
 	self.assertTrue(math.ldexp(1.0,100000)>0)
 	self.assertTrue(math.ldexp(-1.0,100000)<0)
-        ###self.assertEquals(math.ldexp(1., -1000000), 0.)
-        ###self.assertEquals(math.ldexp(-1., -1000000), -0.)
+	#cf don't return +-0 for big numbers in ldexp function
+        #self.assertEquals(math.ldexp(1., -1000000), 0.)
+        #self.assertEquals(math.ldexp(-1., -1000000), -0.)
         self.assertEquals(math.ldexp(INF, 30), INF)
         self.assertEquals(math.ldexp(NINF, -213), NINF)
         self.assert_(math.isnan(math.ldexp(NAN, 0)))
