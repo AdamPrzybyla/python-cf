@@ -171,6 +171,7 @@ def set_cf_parameter(name, value):
     globals()[name] = value
 
 class cf_base(object):
+#class cf_base(float):
     """The abstract base class for continued fractions.
     Defines the methods required to simulate numbers.
 
@@ -2142,46 +2143,46 @@ def atan2(y, x):
                 return -pi
             return pi
 
-def _cf_pi_generator():
-    """Return subsequent partial quotients of pi, using
-    a generalized continued fraction for 4/pi."""
-
-    def gcd(x, y):
-        """Return the gcd of x and y."""
-        while y:
-            x, y = y, x%y
-        return x
-
-    # c and d would equal zero at the very beginning of
-    # the iteration if we had started it from scratch with
-    # a,b,c,d,p,q = 4,0,1,1,1,3. By emitting the first
-    # partial quotient verbatim and initializing the
-    # parameters with later values, we dispose of the
-    # cases c == 0 and d == 0 inside the loop.
-    yield 3
-    a, b, c, d, p, q = 51, 6, 7, 1, 16, 9
-    while 1:
-        ac, a_mod_c = divmod(a, c)
-        bd, b_mod_d = divmod(b, d)
-        if ac == bd:
-            yield ac
-            a, b, c, d = c, d, a_mod_c, b_mod_d
-        else:
-            a, b, c, d = p*b + q*a, a, p*d + q*c, c
-            # The p's are consecutive squares;
-            # the q's are consecutive odd integers.
-            p += q
-            q += 2
-            if q&2047 == 1:
-                # Once in a while reduce a, b, c, d.
-                gcd_abcd = gcd(a, gcd(c, gcd(b, d)))
-                a //= gcd_abcd
-                b //= gcd_abcd
-                c //= gcd_abcd
-                d //= gcd_abcd
-
 class _cf_pi(cf_base):
     """Regular continued fraction for pi."""
+
+    def _cf_pi_generator():
+        """Return subsequent partial quotients of pi, using
+        a generalized continued fraction for 4/pi."""
+    
+        def gcd(x, y):
+            """Return the gcd of x and y."""
+            while y:
+                x, y = y, x%y
+            return x
+    
+        # c and d would equal zero at the very beginning of
+        # the iteration if we had started it from scratch with
+        # a,b,c,d,p,q = 4,0,1,1,1,3. By emitting the first
+        # partial quotient verbatim and initializing the
+        # parameters with later values, we dispose of the
+        # cases c == 0 and d == 0 inside the loop.
+        yield 3
+        a, b, c, d, p, q = 51, 6, 7, 1, 16, 9
+        while 1:
+            ac, a_mod_c = divmod(a, c)
+            bd, b_mod_d = divmod(b, d)
+            if ac == bd:
+                yield ac
+                a, b, c, d = c, d, a_mod_c, b_mod_d
+            else:
+                a, b, c, d = p*b + q*a, a, p*d + q*c, c
+                # The p's are consecutive squares;
+                # the q's are consecutive odd integers.
+                p += q
+                q += 2
+                if q&2047 == 1:
+                    # Once in a while reduce a, b, c, d.
+                    gcd_abcd = gcd(a, gcd(c, gcd(b, d)))
+                    a //= gcd_abcd
+                    b //= gcd_abcd
+                    c //= gcd_abcd
+                    d //= gcd_abcd
 
     def __new__(cls):
         """Memoize the results of _cf_pi_generator()
