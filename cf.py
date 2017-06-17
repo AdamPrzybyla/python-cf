@@ -2146,7 +2146,7 @@ def atan2(y, x):
 class _cf_pi(cf_base):
     """Regular continued fraction for pi."""
 
-    def _cf_pi_generator():
+    def _cf_pi_generator(self):
         """Return subsequent partial quotients of pi, using
         a generalized continued fraction for 4/pi."""
     
@@ -2190,7 +2190,7 @@ class _cf_pi(cf_base):
 
         self = object.__new__(cls)
         self.cache = []
-        self.next_pq = _cf_pi_generator().next
+        self.next_pq = self._cf_pi_generator().next
         return self
 
 # Singletons for pi, pi/2 and pi/4.
