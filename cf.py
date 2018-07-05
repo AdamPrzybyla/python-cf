@@ -22,6 +22,10 @@ Changed by Adam Przybyla <adam@ertel.com.pl> 07.09.2011
 - added Python 2.6 math compatibility functions: 
 - ldexp(x,y) frexp(x) fsum(x) isnan(x) isinf(x) atanh(x) copysign(x,y) log3p(x) trunc(x) acosh(x) asinh(x) factorial(x)
 - fixed NaN error
+
+Changed by Adam Przybyla <adam.przybyla@gmail.com> 05.07.2018
+- added Python 2.7 math compatibility functions: 
+- erf erfc
 """
 
 # TODO:
@@ -37,6 +41,7 @@ Changed by Adam Przybyla <adam@ertel.com.pl> 07.09.2011
 # If we're using Python 2.2, then enable generators and override
 # int() with long(). No effect in Python version 2.3 and later.
 from __future__ import generators
+__version__ = "0.1"
 import sys
 try:
     int(sys.maxint+1)
@@ -2082,6 +2087,35 @@ def acos(x):
     if isinstance(x, float) and str(x)=='nan':
         return float('nan')
     return half_pi - asin(x)
+
+def erf(x):
+    if isnan(x) or abs(x)==0:
+        return x
+    # constants
+    a1 =  0.254829592
+    a2 = -0.284496736
+    a3 =  1.421413741
+    a4 = -1.453152027
+    a5 =  1.061405429
+    p  =  0.3275911
+
+    # Save the sign of x
+    sign = 1
+    if x < 0:
+        sign = -1
+    x = abs(x)
+    z=26
+    if x>z or x<-z:
+        return sign*1.0
+
+    # A&S formula 7.1.26
+    t = 1.0/(1.0 + p*x)
+    y = 1.0 - (((((a5*t + a4)*t) + a3)*t + a2)*t + a1)*t*exp(-x*x)
+
+    return sign*y
+
+def erfc(x):
+    return 1-erf(x)
 
 def atan2(y, x):
     """Return the arc tangent of y/x."""
