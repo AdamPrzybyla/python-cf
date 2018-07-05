@@ -4,3 +4,6 @@
 .pydevproject
 .settings/
 .cache
+.coverage
+.scannerwork
+nosetests.xml
