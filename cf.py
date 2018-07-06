@@ -2233,6 +2233,7 @@ half_pi = pi/2
 quarter_pi = pi/4
 
 if __name__ == '__main__':
+    import math
     from random import random, seed
     from time import clock
     # Set the seed of the random number generator
@@ -2271,6 +2272,7 @@ if __name__ == '__main__':
     def test():
         start_time = clock()
         # Some exact results
+        print math.e==float(e)
         display('digit_by_digit(e, 400)')
         display('digit_by_digit(pi, 400)')
         display('digit_by_digit(sqrt(2), 400)')
