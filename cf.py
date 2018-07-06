@@ -176,7 +176,6 @@ def set_cf_parameter(name, value):
     globals()[name] = value
 
 class cf_base(object):
-#class cf_base(float):
     """The abstract base class for continued fractions.
     Defines the methods required to simulate numbers.
 
