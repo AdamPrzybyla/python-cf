@@ -954,7 +954,7 @@ def digits(x, base=10):
 def floor(x):
     """Round x down to an integer."""
 
-    if str(x)=='nan' or str(x)=='nan':
+    if str(x)=='nan':
 	return float('nan')
     # TODO: do we need to return a cf instead of int?
     return float(cf(x).pq(0))
@@ -1159,13 +1159,15 @@ def fsum(x):
     return reduce(lambda k1,k2: cf(k1)+k2,x)
 
 def isnan(x):
-    return not x==x
+    y=x
+    return not y==x
 
 def isinf(x):
     if str(x)=="inf" or str(x)=="-inf":
         return True
 
-    if str(cf(x))=="nan" and x==x:
+    y=x
+    if str(cf(x))=="nan" and x==y:
         return True
     else:
         return False
