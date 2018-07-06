@@ -2,7 +2,7 @@
 # Python test set -- math module
 # XXXX Should not do tests around zero only
 
-from test.test_support import run_unittest, verbose
+from test.test_support import run_unittest
 import unittest
 import cf as math
 import os
