@@ -7,3 +7,4 @@
 .coverage
 .scannerwork
 nosetests.xml
+coverage.xml
