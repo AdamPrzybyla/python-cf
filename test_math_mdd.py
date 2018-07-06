@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 # Metaprogramming Driven Development
 
-import unittest,os,struct
+import unittest
+import struct
 import cf as math
 eps = 1E-05
 math_testcases = 'math_testcases.txt'
@@ -33,6 +34,25 @@ def to_ulps(x):
 	if n < 0:
 		n = ~(n+2**63)
 	return n
+
+def acc_check(expected, got, rel_err=2e-15, abs_err = 5e-323):
+	"""Determine whether non-NaN floats a and b are equal to within a
+	(small) rounding error.  The default values for rel_err and
+	abs_err are chosen to be suitable for platforms where a float is
+	represented by an IEEE 754 double.  They allow an error of between
+	9 and 19 ulps."""
+
+	# need to special case infinities, since inf - inf gives nan
+	if math.isinf(expected) and got == expected:
+		return None
+
+	error = got - expected
+
+	permitted_error = max(abs_err, rel_err * abs(expected))
+	if abs(error) < permitted_error:
+		return None
+	return "error = {}; permitted error = {}".format(error,
+													 permitted_error)
 
 class gen_math_test(type):
 	def __init__(cls, name, bases, nmspc):
@@ -196,7 +216,7 @@ class test_mmath_sem(unittest.TestCase):
 				if got == expected:
 					return
 
-			fail_msg = fail_fmt.format(id, fn, arg, expected, got)
+			fail_msg = fail_fmt.format(idn, fn, arg, expected, got)
 			if accuracy_failure is not None:
 				fail_msg += ' ({})'.format(accuracy_failure)
 			failures.append(fail_msg)

@@ -908,17 +908,15 @@ class MathTests(unittest.TestCase):
     if verbose:
         def test_exceptions(self):
             try:
-                x = math.sqrt(-1.0)
+                math.sqrt(-1.0)
             except ValueError:
                 pass
             else:
                 self.fail("sqrt(-1) didn't raise ValueError")
 
 def test_main():
-    from doctest import DocFileSuite
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(MathTests))
-    #suite.addTest(DocFileSuite("ieee754.txt"))
     run_unittest(suite)
 
 if __name__ == '__main__':
