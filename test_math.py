@@ -906,126 +906,13 @@ class MathTests(unittest.TestCase):
     # tested.
 
     if verbose:
-        #@unittest.skip("no exceptions")
         def test_exceptions(self):
-            # the cf have no OverflowError 
-            #try:
-            #    x = math.exp(-1000000000)
-            #except:
-                # mathmodule.c is failing to weed out underflows from libm, or
-                # we've got an fp format with huge dynamic range
-                #self.fail("underflowing exp() should not have raised "
-                #          "an exception")
-            #if x != 0:
-            #    self.fail("underflowing exp() should have returned 0")
-
-            # If this fails, probably using a strict IEEE-754 conforming libm, and x
-            # is +Inf afterwards.  But Python wants overflows detected by default.
-            #try:
-            #    x = math.exp(1000000000)
-            #except OverflowError:
-            #    pass
-            #else:
-            #    self.fail("overflowing exp() didn't trigger OverflowError")
-
-            # If this fails, it could be a puzzle.  One odd possibility is that
-            # mathmodule.c's macros are getting confused while comparing
-            # Inf (HUGE_VAL) to a NaN, and artificially setting errno to ERANGE
-            # as a result (and so raising OverflowError instead).
             try:
                 x = math.sqrt(-1.0)
             except ValueError:
                 pass
             else:
                 self.fail("sqrt(-1) didn't raise ValueError")
-
-    @requires_IEEE_754
-    def test_testfile(self):
-        for id, fn, ar, ai, er, ei, flags in parse_testfile(test_file):
-            # Skip if either the input or result is complex, or if
-            # flags is nonempty
-            if ai != 0. or ei != 0. or flags:
-                continue
-            if fn in ['rect', 'polar']:
-                # no real versions of rect, polar
-                continue
-            func = getattr(math, fn)
-            try:
-                result = func(ar)
-            except ValueError:
-                message = ("Unexpected ValueError in " +
-                           "test %s:%s(%r)\n" % (id, fn, ar))
-                self.fail(message)
-            except OverflowError:
-                message = ("Unexpected OverflowError in " +
-                           "test %s:%s(%r)\n" % (id, fn, ar))
-                self.fail(message)
-            self.ftest("%s:%s(%r)" % (id, fn, ar), result, er)
-
-    @unittest.skipUnless(float.__getformat__("double").startswith("IEEE"),
-                         "test requires IEEE 754 doubles")
-    def test_mtestfile(self):
-        ALLOWED_ERROR = 20  # permitted error, in ulps
-        fail_fmt = "{}:{}({!r}): expected {!r}, got {!r}"
-
-        failures = []
-        for id, fn, arg, expected, flags in parse_mtestfile(math_testcases):
-            if fn in ['lgamma','gamma','expm1']:
-                continue
-            func = getattr(math, fn)
-
-            if 'invalid' in flags or 'divide-by-zero' in flags:
-                expected = 'ValueError'
-            elif 'overflow' in flags:
-                expected = 'OverflowError'
-
-            try:
-                got = func(arg)
-            except ValueError:
-                got = 'ValueError'
-            except OverflowError:
-                got = 'OverflowError'
-
-            accuracy_failure = None
-            if isinstance(got, float) and isinstance(expected, float):
-                if math.isnan(expected) and math.isnan(got):
-                    continue
-                if not math.isnan(expected) and not math.isnan(got):
-                    if fn == 'lgamma':
-                        # we use a weaker accuracy test for lgamma;
-                        # lgamma only achieves an absolute error of
-                        # a few multiples of the machine accuracy, in
-                        # general.
-                        accuracy_failure = acc_check(expected, got,
-                                                  rel_err = 5e-15,
-                                                  abs_err = 5e-15)
-                    elif fn == 'erfc':
-                        # erfc has less-than-ideal accuracy for large
-                        # arguments (x ~ 25 or so), mainly due to the
-                        # error involved in computing exp(-x*x).
-                        #
-                        # XXX Would be better to weaken this test only
-                        # for large x, instead of for all x.
-                        accuracy_failure = ulps_check(expected, got, 2000)
-
-                    else:
-                        accuracy_failure = ulps_check(expected, got, 20)
-                    if accuracy_failure is None:
-                        continue
-
-            if isinstance(got, str) and isinstance(expected, str):
-                if got == expected:
-                    continue
-
-            fail_msg = fail_fmt.format(id, fn, arg, expected, got)
-            if accuracy_failure is not None:
-                fail_msg += ' ({})'.format(accuracy_failure)
-            failures.append(fail_msg)
-
-        if failures:
-            self.fail('Failures in test_mtestfile:\n  ' +
-                      '\n  '.join(failures))
-
 
 def test_main():
     from doctest import DocFileSuite
