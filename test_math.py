@@ -1,7 +1,7 @@
 # Python test set -- math module
 # XXXX Should not do tests around zero only
 
-from test.test_support import run_unittest, verbose
+from test.test_support import verbose
 import unittest
 #import math
 import cf as math
@@ -914,10 +914,5 @@ class MathTests(unittest.TestCase):
             else:
                 self.fail("sqrt(-1) didn't raise ValueError")
 
-def test_main():
-    suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(MathTests))
-    run_unittest(suite)
-
-if __name__ == '__main__':
-    test_main()
+if __name__=="__main__":
+	unittest.main()
