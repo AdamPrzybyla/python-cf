@@ -1405,8 +1405,7 @@ def _cf_iexp(n):
                 else:
                     # Save one level of unop, returning
                     # 1/(result*_cf_exp_2_to_nth(k))
-                    return binop(result, _cf_exp_2_to_nth(k),
-                        0, 0, 0, 1, 1, 0, 0, 0)
+                    return binop(result, _cf_exp_2_to_nth(k), 0, 0, 0, 1, 1, 0, 0, 0)
             else:
                 if result is one:
                     result = _cf_exp_2_to_nth(k)
