@@ -2232,7 +2232,6 @@ half_pi = pi/2
 quarter_pi = pi/4
 
 if __name__ == '__main__':
-    import math
     from random import random, seed
     from time import clock
     # Set the seed of the random number generator
