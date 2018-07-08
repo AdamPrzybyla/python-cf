@@ -1141,9 +1141,8 @@ def frexp(x):
 		
 def fsum(x):
     """Return an accurate sum of values in the iterable."""   
-    if len(x)==1:
-	if x[0]==[]:
-		return 0.0
+    if len(x)==1 and x[0]==[]:
+	return 0.0
     if not x:
 	return 0.0
     return reduce(lambda k1,k2: cf(k1)+k2,x)
