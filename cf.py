@@ -1048,29 +1048,25 @@ def pow(x, y):
 
     if y==0:
         return 1.0
-    else:
-          if isinstance(x, float) and str(x)=='inf':
-		if y<0:
-			return 0.0
-		else:
-			if str(y)=='nan':
-				return y
-			else:
-	        		return x
-    if isinstance(x, float) and str(x)=='-inf':
-	if y==0:
-		return 1.0
+    if isinstance(x, float) and str(x)=='inf':
+	if y<0:
+		return 0.0
 	else:
-		if y<0:
-			return 0.0
+		if str(y)=='nan':
+			return y
 		else:
-			if str(y)=='nan':
-				return y
+	        	return x
+    if isinstance(x, float) and str(x)=='-inf':
+	if y<0:
+		return 0.0
+	else:
+		if str(y)=='nan':
+			return y
+		else:
+                        if y%2==1:
+	        	    return x
 			else:
-                                if y%2==1:
-	        		    return x
-				else:
-				    return -x
+			    return -x
 
     if x==-1 and isinstance(y, float):
         if str(y)=='inf':
