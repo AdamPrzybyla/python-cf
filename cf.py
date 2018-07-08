@@ -1405,52 +1405,10 @@ def _cf_iexp(n):
         k += 1
     return result
 
-class exp(cf_base):
-    """Calculate e to the power x, lazily decomposing x into
-    an alternating sum of fractions with alternatingly a bit
-    too large (or exact) and a bit too small (or exact)
-    denominators, known as the Ostrogradsky series of second
-    kind."""
-
-    # References for the Ostrogradsky series of second kind:
-    # * Wac{\l}aw Sierpi\'nski, O kilku algorytmach dla rozwijania
-    #   liczb rzeczywistych na szeregi, Sprawozdania z posiedze\'n
-    #   Towarzystwa Naukowego Warszawskiego, Wydzia{\l} III 4 (1911),
-    #   56-77; also: Sur quelques algorithmes pour d\'evelopper les
-    #   nombres r\'eels en s\'eries, in: Oeuvres choisies, tome I,
-    #   PWN, Warszawa, 1974, 236-254
-    # * Evgeny Yakovlevych Remez, O zakonomernykh ryadakh,
-    #   kotorye mogut byt' svyazany s dvumya algoritmami
-    #   M. V. Ostrogradskogo dlya priblizheniya irracionalnykh
-    #   chisel, Uspekhi matematicheskikh nauk 6 (1951), no. 5(45),
-    #   33-42
-
-    def __new__(cls, x):
-        """Initialize the lazy calculation: set self.better
-        to e**floor(x) and self.x to x - floor(x)."""
-
-        if isinstance(x, (int,long)):
-            # Fast track for integer exponents.
-            return _cf_iexp(x)
-        if isinstance(x, float) and str(x)=='inf':
-            return x
-        if isinstance(x, float) and str(x)=='-inf':
-            return 0.0
-        x = cf(x)
-        exponent = x.pq(0)
-        if exponent is None:
-            return NaN
-        self = object.__new__(cls)
-        self.better = _cf_iexp(exponent)
-        self.worse = NaN
-        self.x = x - exponent
-        self.muldiv = 1
-        self.cache = []
-        return self
-
+class cf_base2(cf_base):
     def pq(self, n):
-        """Return the common partial quotients of e**(the last
-        partial sum) and e**(the penultimate partial sum),
+        """Return the common partial quotients of tan(the last
+        partial sum) and tan(the penultimate partial sum),
         extending the sum if necessary. Decides that the result
         is a rational number when the two partial quotients
         differ by one and future partial quotients would exceed
@@ -1458,24 +1416,21 @@ class exp(cf_base):
 
         After a term 1/q, the next term in the sum is at most
         1/(q*(q+1)), so the accuracy of the approximation at
-        least doubles with each term. The worst case are x's
-        with the fractional part equal to Cahen's constant:
-        1 - 1/2 + 1/6 - 1/42 + ... == cf(0; 1, 1, 4, 9, 196,...)"""
+        least doubles with each term."""
 
         if n < len(self.cache):
             return self.cache[n]
         # We need to compute another term.
-        assert n == len(self.cache)
         while 1:
             # Here lesser needn't be less than greater at all.
             lesser = self.worse.pq(n)
             greater = self.better.pq(n)
             if lesser == greater:
                 # x always lies between the last two partial sums,
-                # and e**x is monotonic, so when the partial
-                # quotients of self.worse and self.better coincide,
-                # the actual partial quotient of e**x will be equal
-                # to them.
+                # and tan(x) is monotonic for x in [0, pi/4], so
+                # when the partial quotients of self.worse and
+                # self.better coincide, the actual partial quotient
+                # of e**x will be equalto them.
                 self.cache.append(greater)
                 return greater
             elif lesser is not None:
@@ -1520,23 +1475,69 @@ class exp(cf_base):
                 self.worse = self.better
                 continue
             self.worse = self.better
-            # When self.muldiv == 1, self.better *= exp(1/denominator).
-            # When self.muldiv == 0, self.better /= exp(1/denominator).
-            self.better = binop(self.better, _cf_exp_1n(denominator),
-                self.muldiv, 1 - self.muldiv, 0, 0,
-                0, 0, 1 - self.muldiv, self.muldiv)
-            # If we've multiplied self.better, let's divide it next time;
-            # if we've divided it, let's multiply it next time.
-            self.muldiv = 1 - self.muldiv
-            # Set self.x to x - partial sum computed so far
-            # or partial sum - x.
-            self.x = cf((0, denominator)) - self.x
-            # Compute the partial quotients 0..n-1 of self.better,
-            # so that we can examine self.better.pq(n) in the next
-            # iteration of the main loop.
-            better_pq = self.better.pq
-            for i in xrange(n):
-                better_pq(i)
+            self.pq_own(n,denominator)
+
+class exp(cf_base2):
+    """Calculate e to the power x, lazily decomposing x into
+    an alternating sum of fractions with alternatingly a bit
+    too large (or exact) and a bit too small (or exact)
+    denominators, known as the Ostrogradsky series of second
+    kind."""
+
+    # References for the Ostrogradsky series of second kind:
+    # * Wac{\l}aw Sierpi\'nski, O kilku algorytmach dla rozwijania
+    #   liczb rzeczywistych na szeregi, Sprawozdania z posiedze\'n
+    #   Towarzystwa Naukowego Warszawskiego, Wydzia{\l} III 4 (1911),
+    #   56-77; also: Sur quelques algorithmes pour d\'evelopper les
+    #   nombres r\'eels en s\'eries, in: Oeuvres choisies, tome I,
+    #   PWN, Warszawa, 1974, 236-254
+    # * Evgeny Yakovlevych Remez, O zakonomernykh ryadakh,
+    #   kotorye mogut byt' svyazany s dvumya algoritmami
+    #   M. V. Ostrogradskogo dlya priblizheniya irracionalnykh
+    #   chisel, Uspekhi matematicheskikh nauk 6 (1951), no. 5(45),
+    #   33-42
+
+    def __new__(cls, x):
+        """Initialize the lazy calculation: set self.better
+        to e**floor(x) and self.x to x - floor(x)."""
+
+        if isinstance(x, (int,long)):
+            # Fast track for integer exponents.
+            return _cf_iexp(x)
+        if isinstance(x, float) and str(x)=='inf':
+            return x
+        if isinstance(x, float) and str(x)=='-inf':
+            return 0.0
+        x = cf(x)
+        exponent = x.pq(0)
+        if exponent is None:
+            return NaN
+        self = object.__new__(cls)
+        self.better = _cf_iexp(exponent)
+        self.worse = NaN
+        self.x = x - exponent
+        self.muldiv = 1
+        self.cache = []
+        return self
+
+    def pq_own(self,n,denominator):
+        # When self.muldiv == 1, self.better *= exp(1/denominator).
+        # When self.muldiv == 0, self.better /= exp(1/denominator).
+        self.better = binop(self.better, _cf_exp_1n(denominator),
+            self.muldiv, 1 - self.muldiv, 0, 0,
+            0, 0, 1 - self.muldiv, self.muldiv)
+        # If we've multiplied self.better, let's divide it next time;
+        # if we've divided it, let's multiply it next time.
+        self.muldiv = 1 - self.muldiv
+        # Set self.x to x - partial sum computed so far
+        # or partial sum - x.
+        self.x = cf((0, denominator)) - self.x
+        # Compute the partial quotients 0..n-1 of self.better,
+        # so that we can examine self.better.pq(n) in the next
+        # iteration of the main loop.
+        better_pq = self.better.pq
+        for i in xrange(n):
+            better_pq(i)
 
 def _cf_ilog(x):
     """Return a tuple (floor(log(x)), x/e**floor(log(x))); the
@@ -1748,7 +1749,7 @@ class _cf_tan_1n(cf_base):
             # tan(1/0) == NaN.
             return NaN
 
-class _cf_tan(cf_base):
+class _cf_tan(cf_base2):
     """Calculate the tangent of x for 0 <= x <= pi/4
     (actually even for 0 <= x < 1), lazily decomposing x
     into the Ostrogradsky series of second kind."""
@@ -1768,96 +1769,28 @@ class _cf_tan(cf_base):
         self.cache = []
         return self
 
-    def pq(self, n):
-        """Return the common partial quotients of tan(the last
-        partial sum) and tan(the penultimate partial sum),
-        extending the sum if necessary. Decides that the result
-        is a rational number when the two partial quotients
-        differ by one and future partial quotients would exceed
-        exp_tan_max_pq.
-
-        After a term 1/q, the next term in the sum is at most
-        1/(q*(q+1)), so the accuracy of the approximation at
-        least doubles with each term."""
-
-        if n < len(self.cache):
-            return self.cache[n]
-        # We need to compute another term.
-        while 1:
-            # Here lesser needn't be less than greater at all.
-            lesser = self.worse.pq(n)
-            greater = self.better.pq(n)
-            if lesser == greater:
-                # x always lies between the last two partial sums,
-                # and tan(x) is monotonic for x in [0, pi/4], so
-                # when the partial quotients of self.worse and
-                # self.better coincide, the actual partial quotient
-                # of e**x will be equalto them.
-                self.cache.append(greater)
-                return greater
-            elif lesser is not None:
-                if lesser > greater:
-                    # Only here we assure that lesser < greater.
-                    lesser, greater = greater, lesser
-                if lesser == greater - 1:
-                    # Compute the accuracy of the complete quotient:
-                    # it differs from greater by at most 1/next_pq.
-                    if self.better.pq(n) == greater:
-                        # self.better is an overestimation.
-                        next_pq = self.better.pq(n + 1)
-                    elif self.better.pq(n + 1) == 1:
-                        # self.better is an underestimation.
-                        next_pq = self.better.pq(n + 2) + 1
-                    else:
-                        # self.better hasn't got enough accuracy yet.
-                        next_pq = None
-                    # next_pq may be None when we set it explicitly
-                    # or when self.better(n + 1) is None, i.e.
-                    # self.better itself is a rational number.
-                    if ((next_pq is not None)
-                    and (next_pq//exp_tan_max_pq >= 1)):
-                        # If greater differs from the complete
-                        # quotient by at most 1/exp_log_accuracy,
-                        # then heuristically decide that the result
-                        # is a rational number: emit greater and
-                        # end the continued fraction.
-                        self.cache.append(greater)
-                        self.cache.append(None)
-                        return greater
-            # Compute self.x.pq(0), so that
-            # we can compute self.x.pq(1).
-            self.x.pq(0)
-            assert self.x.pq(0) == 0
-            # 1/denominator is the next term
-            # of the alternating sum for x.
-            denominator = self.x.pq(1)
-            if denominator is None:
-                # self.x == 0; x has a finite alternating
-                # sum representation (it's a rational number).
-                self.worse = self.better
-                continue
-            self.worse = self.better
-            # When self.addsub == +1, self.better =
-            #     (self.better + tan(1/n))/(1 - self.better*tan(1/n))
-            # When self.addsub == -1, self.better =
-            #     (self.better - tan(1/n))/(1 + self.better*tan(1/n))
-            if self.better is zero:
-                self.better = _cf_tan_1n(denominator)
-            else:
-                self.better = binop(
-                    self.better, _cf_tan_1n(denominator),
-                    0, 1, self.addsub, 0, -self.addsub, 0, 0, 1)
-            # Change the operation to the opposite one.
-            self.addsub = -self.addsub
-            # Set self.x to x - partial sum computed so far
-            # or partial sum - x.
-            self.x = cf((0, denominator)) - self.x
-            # Compute the partial quotients 0..n-1 of self.better,
-            # so that we can examine self.better.pq(n) in the next
-            # iteration of the main loop.
-            better_pq = self.better.pq
-            for i in xrange(n):
-                better_pq(i)
+    def pq_own(self,n,denominator):
+        # When self.addsub == +1, self.better =
+        #     (self.better + tan(1/n))/(1 - self.better*tan(1/n))
+        # When self.addsub == -1, self.better =
+        #     (self.better - tan(1/n))/(1 + self.better*tan(1/n))
+        if self.better is zero:
+            self.better = _cf_tan_1n(denominator)
+        else:
+            self.better = binop(
+                self.better, _cf_tan_1n(denominator),
+                0, 1, self.addsub, 0, -self.addsub, 0, 0, 1)
+        # Change the operation to the opposite one.
+        self.addsub = -self.addsub
+        # Set self.x to x - partial sum computed so far
+        # or partial sum - x.
+        self.x = cf((0, denominator)) - self.x
+        # Compute the partial quotients 0..n-1 of self.better,
+        # so that we can examine self.better.pq(n) in the next
+        # iteration of the main loop.
+        better_pq = self.better.pq
+        for i in xrange(n):
+            better_pq(i)
 
 def tan(x):
     """Return the tangent of x."""
