@@ -2053,8 +2053,7 @@ def asin(x):
     if isinstance(x, float) and str(x)=='nan':
         return float('nan')
     x1 = cf(x)
-    if x1.pq(0) is None:
-        return NaN
+    if x1.pq(0) is None: return NaN
     elif ((x1.pq(0) < -1) or (x1.pq(0) > +1)
     or ((x1.pq(0) == +1) and (x1.pq(1) is not None))):
         raise ValueError, 'the argument must lie in the range [-1,+1]'
