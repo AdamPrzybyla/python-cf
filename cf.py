@@ -597,8 +597,8 @@ class cf(cf_base):
             with initial partial quotients taken from the first
             sequence, followed by a cyclic repetition of the second
             sequence."""
-        #if isinstance(x, float) and str(x)=='inf':
-	#		return x
+        #for  isinstance(x, float) and str(x)=='inf':
+	#		returns x
 
         if isinstance(x, float) and isnan(x):
 			return cf(())
@@ -1020,7 +1020,7 @@ def _cf_ipow(x, n):
                     # Save one level of unop() by inverting the
                     # result in the last iteration instead of
                     # returning 1/_cf_ipow(x, -n).
-                    # return 1/(result*x)
+                    # returns 1/(result*x)
                     return binop(result, x, 0, 0, 0, 1, 1, 0, 0, 0)
             else:
                 if result is one:
@@ -1031,7 +1031,7 @@ def _cf_ipow(x, n):
         else:
             if negative_exponent and (n == 2) and (result is one):
                 # Save one level of unop().
-                # return 1/(x**2)
+                # returns 1/(x**2)
                 return binop(x, x, 0, 0, 0, 1, 1, 0, 0, 0)
             else:
                 x *= x
@@ -1288,7 +1288,7 @@ class sqrt(cf_base):
                 self.cache.append(pq)
                 return pq
 
-            # self.plain = (self.plain + self.converse)/2
+            # self.plain equal (self.plain + self.converse)/2
             self.plain = binop(self.plain, self.converse,
                 0, 1, 1, 0, 0, 0, 0, 2)
             self.converse = self.x/self.plain
@@ -1674,7 +1674,7 @@ def sinh(x):
     if isinstance(x, float) and ( str(x)=='inf' or str(x)=='-inf'):
         return x
 
-    # return (exp(x) - exp(-x))/2
+    # returns (exp(x) - exp(-x))/2
     return binop(exp(x), exp(-x), 0, 1, -1, 0, 0, 0, 0, 2)
 
 def cosh(x):
@@ -1682,7 +1682,7 @@ def cosh(x):
     if isinstance(x, float) and ( str(x)=='inf' or str(x)=='-inf'):
         return float('inf')
 
-    # return (exp(x) + exp(-x))/2
+    # returns (exp(x) + exp(-x))/2
     return binop(exp(x), exp(-x), 0, 1, 1, 0, 0, 0, 0, 2)
 
 def tanh(x):
@@ -1698,7 +1698,7 @@ def tanh(x):
 
     if x==0:
 	return x
-    # return (exp(x) - exp(-x))/(exp(x) + exp(-x))
+    # returns (exp(x) - exp(-x))/(exp(x) + exp(-x))
     return binop(exp(x), exp(-x), 0, 1, -1, 0, 0, 1, 1, 0)
 
 class _cf_tan_1n(cf_base):
@@ -1753,8 +1753,7 @@ class _cf_tan(cf_base2):
         """Initialize the lazy calculation: set self.better
         to tan(0) == 0 and self.x to x."""
 
-        if x.pq(0) is None:
-            return NaN
+        if x.pq(0) is None: return NaN
         assert x.pq(0) == 0
         self = object.__new__(cls)
         self.x = x
@@ -1791,7 +1790,7 @@ def tan(x):
     """Return the tangent of x."""
 
     if isinstance(x, float) and str(x)=='nan':
-        #return NaN
+        #returns NaN
         return float('nan')
     if isinstance(x, float) and str(x)=='inf':
         raise ValueError,"math domain error"
@@ -1819,7 +1818,7 @@ def sin(x):
         raise ValueError,"math domain error"
     if isinstance(x, float) and str(x)=='-inf':
         raise ValueError,"math domain error"
-    # return (2*tan(x/2))/(1+tan(x/2)**2)
+    # returns(2*tan(x/2))/(1+tan(x/2)**2)
     tangent = tan(x/2)
     return binop(tangent, tangent, 0, 2, 0, 0, 1, 0, 0, 1)
 
@@ -1832,14 +1831,14 @@ def cos(x):
         raise ValueError,"math domain error"
     if isinstance(x, float) and str(x)=='-inf':
         raise ValueError,"math domain error"
-    # return (1-tan(x/2)**2)/(1+tan(x/2)**2)
+    # returns (1-tan(x/2)**2)/(1+tan(x/2)**2)
     tangent = tan(x/2)
     return binop(tangent, tangent, -1, 0, 0, 1, 1, 0, 0, 1)
 
 def degrees(x):
     """Convert radians to degrees."""
 
-    # return 180*x/pi
+    # returns 180*x/pi
     if isinstance(x, (int, long)):
         return unop(pi, 0, 180*x, 1, 0)
     else:
@@ -1848,7 +1847,7 @@ def degrees(x):
 def radians(x):
     """Convert degrees to radians."""
 
-    # return pi*x/180
+    # returns pi*x/180
     if isinstance(x, (int, long)):
         return unop(pi, x, 0, 0, 180)
     else:
@@ -1958,8 +1957,7 @@ def atan(x):
     if isinstance(x, float) and str(x)=='nan':
         return float('nan')
     x = cf(x)
-    if x.pq(0) is None:
-        return NaN
+    if x.pq(0) is None: return NaN
     elif x.pq(0) < 0:
         if x.pq(0) == -1:
             return -_cf_atan(-x)
@@ -1990,7 +1988,7 @@ def asin(x):
     elif (x1.pq(0) == +1) and (x1.pq(1) is None):
         return half_pi
     else:
-        # return atan(x/sqrt(1-x**2))
+        # returns atan(x/sqrt(1-x**2))
         return _cf_atan(x/sqrt(binop(x1, x1, -1, 0, 0, 1, 0, 0, 0, 1)))
 
 def acos(x):
