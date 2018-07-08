@@ -345,7 +345,7 @@ class cf_base(object):
         return 0L
 
     def __nonzero__(self):
-        """Return True iff self == 0."""
+        """Return True if self == 0."""
 
         self_pq = self.pq
         self_floor = self_pq(0)
