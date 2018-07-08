@@ -303,26 +303,21 @@ class cf_base(object):
         # has the same value but differs in particular partial
         # quotients.
         self_pq = self.pq
-        if not self_pq(0) is None:
-            #   raise ValueError, 'NaN detected'
-            if isinstance(other, (int, long)):
-                # The casts to long are necessary, because
-                # (int).__cmp__(long) and (long).__cmp__(int)
-                # don't work.
-                cmp = long(self_pq(0)).__cmp__(long(other))
-                if cmp:
-                    return cmp
-                elif self_pq(1) is None:
-                    return 0
-                else:
-                    return long(self_pq(1)).__cmp__(0L)
+        if not self_pq(0) is None and isinstance(other, (int, long)):
+            # The casts to long are necessary, because
+            # (int).__cmp__(long) and (long).__cmp__(int)
+            # don't work.
+            cmp = long(self_pq(0)).__cmp__(long(other))
+            if cmp:
+                return cmp
+            elif self_pq(1) is None:
+                return 0
+            else:
+                return long(self_pq(1)).__cmp__(0L)
         other = cf(other)
         other_pq = other.pq
-        if other_pq(0) is None:
-            if self_pq(0) is None:
-                return True
-            else:
-                raise ValueError, 'NaN detected'
+        if other_pq(0) is None and self_pq(0) is None:
+            return True
         for i in xrange(max_iters/2):
             self_pq_i = self_pq(i)
             other_pq_i = other_pq(i)
