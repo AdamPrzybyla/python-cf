@@ -42,12 +42,6 @@ Changed by Adam Przybyla <adam.przybyla@gmail.com> 05.07.2018
 # int() with long(). No effect in Python version 2.3 and later.
 from __future__ import generators
 __version__ = "0.1"
-import sys
-try:
-    int(sys.maxint+1)
-except OverflowError:
-    int = long
-
 max_iters = 100
 # The global variable max_iters is used in two places
 # to limit the number of iterations when the result of
