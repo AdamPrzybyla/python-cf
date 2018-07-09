@@ -362,6 +362,9 @@ class test_cf(unittest.TestCase):
 	def test_str1(self):
 		self.assertEqual(str(+cf(0.0001))[:6],"0.0001")
 
+	def test_str2(self):
+		self.assertEqual(str(cf(0000000000000000000000000000.0000001)), '9.9999999999999995474811182588e-8')
+
 	def test_pow(self):
 		self.assertEqual(pow(cf(2),2,3),1)
 
@@ -377,8 +380,29 @@ class test_cf(unittest.TestCase):
 	def test_quotient(self):
 		self.assertEqual(cf(5)//3,1)
 
+	def test_rmod(self):
+		self.assertEqual(1.0%cf(2),1)
+
 	def test_divmod(self):
 		self.assertEqual(divmod(cf(5),3)[0],1)
+
+	def test_rdivmod(self):
+		self.assertEqual(divmod(3,cf(5))[0],0)
+
+	def test_long(self):
+		self.assertEqual(long(cf(5)),5)
+
+	def test_repr(self):
+		self.assertEqual(repr(cf(5.8888888888888)),"cf(5;1,7,1,138232032760,1,1,1,3,82)")
+
+	def test_repr1(self):
+		self.assertEqual(repr(cf(5)),"cf(5)")
+
+	def test_repr2(self):
+		self.assertEqual(repr(cf(1./1000000)),'cf(0;1000000,22098525395,3,1,1,2,1,2,2,1,1,4,4,1,1,3,..)')
+
+	def test_repr3(self):
+		self.assertEqual(repr(cf(NaN)),"cf(NaN)")
 
 	def test_bool(self):
 		self.assertRaises(ValueError,bool,NaN)
