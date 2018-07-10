@@ -170,7 +170,6 @@ class test_mmath_sem(unittest.TestCase):
 			self.assertTrue(True)
 		else:
 			fn, arg, expected, flags=self.te[n]
-			if fn in ['lgamma','gamma','expm1']: return
 			func = getattr(math, fn)
 
 			if 'invalid' in flags or 'divide-by-zero' in flags:
@@ -186,7 +185,8 @@ class test_mmath_sem(unittest.TestCase):
 				got = 'OverflowError'
 
 			accuracy_failure = None
-			if isinstance(got, float) and isinstance(expected, float):
+			
+			if isinstance(got, (math.cf_base,float)) and isinstance(expected, float):
 				if math.isnan(expected) and math.isnan(got):
 					return
 				if not math.isnan(expected) and not math.isnan(got):
