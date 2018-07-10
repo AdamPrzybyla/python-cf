@@ -21,7 +21,7 @@ Changed by Adam Przybyla <adam@ertel.com.pl> 07.09.2011
 - ldexp(x,y) frexp(x) fsum(x) isnan(x) isinf(x) atanh(x) copysign(x,y) log1p(x) trunc(x) acosh(x) asinh(x) factorial(x)
 - fixed NaN error
 
-Changed by Adam Przybyla <adam.przybyla@gmail.com> 05.07.2018
-- added Python 2.7 math compatibility functions: 
-- erf erfc
-- version 0.1
+Changed by Adam Przybyla <adam.przybyla@gmail.com> 10.07.2018
+- added all Python 2.7 math compatibility functions: 
+- erf erfc lgamma gamma expm1
+- version 0.2

@@ -23,9 +23,10 @@ Changed by Adam Przybyla <adam@ertel.com.pl> 07.09.2011
 - ldexp(x,y) frexp(x) fsum(x) isnan(x) isinf(x) atanh(x) copysign(x,y) log3p(x) trunc(x) acosh(x) asinh(x) factorial(x)
 - fixed NaN error
 
-Changed by Adam Przybyla <adam.przybyla@gmail.com> 05.07.2018
-- added Python 2.7 math compatibility functions: 
-- erf erfc
+Changed by Adam Przybyla <adam.przybyla@gmail.com> 10.07.2018
+- added all Python 2.7 math compatibility functions:
+- erf erfc lgamma gamma expm1
+- version 0.2
 """
 
 # TODO:
@@ -41,7 +42,7 @@ Changed by Adam Przybyla <adam.przybyla@gmail.com> 05.07.2018
 # If we're using Python 2.2, then enable generators and override
 # int() with long(). No effect in Python version 2.3 and later.
 from __future__ import generators
-__version__ = "0.1"
+__version__ = "0.2"
 max_iters = 100
 # The global variable max_iters is used in two places
 # to limit the number of iterations when the result of
@@ -597,8 +598,6 @@ class cf(cf_base):
             with initial partial quotients taken from the first
             sequence, followed by a cyclic repetition of the second
             sequence."""
-        #for  isinstance(x, float) and str(x)=='inf':
-	#		returns x
 
         if isinstance(x, float) and isnan(x):
 			return cf(())
