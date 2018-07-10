@@ -407,6 +407,23 @@ class test_cf(unittest.TestCase):
 	def test_bool(self):
 		self.assertRaises(ValueError,bool,NaN)
 
+	def test_int(self):
+		self.assertRaises(ValueError,int,NaN)
+
+	def test_cf(self):
+		f=cf(1)
+		self.assertRaises(TypeError,cf,f,"fake")
+
+	def test_nan(self):
+		d=NaN
+		self.assertEqual(str(float(d)),"nan")
+
+	def test_int_real(self):
+		self.assertEqual(int(cf(-1.1)),-1)
+
+	def test_complex(self):
+		self.assertEqual(complex(cf(-1.1)),-1.1)
+
 	def test_set_cf_parameter(self):
 		CF.set_cf_parameter("a",123)	
 		self.assertEqual(CF.a,123)
