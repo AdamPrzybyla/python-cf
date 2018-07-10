@@ -2042,12 +2042,12 @@ def lgamma(x):
     '''return natural logarithm of gamma function of x
     raise ValueError if x is negative integer'''
     inf=NaN
-    x = cf(x)
 
     if isnan(x):
        return NaN
     if isinf(x):
-       return NaN
+       return float('inf')
+    x = cf(x)
     e,ix = frexp(x)
     nadj = 0
     signgamp = 1
@@ -2160,9 +2160,15 @@ def lgamma(x):
 def gamma(x):
     '''return gamma function of x
     raise ValueError  if x is negative integer'''
-    x = cf(x)
+    if isnan(x):
+        return NaN
     if isinf(x):
-        return cf(())
+        if x<0:
+           raise ValueError
+        return x
+    if int(x)==x and x<0:
+        raise ValueError
+    x = cf(x)
     if x == 0.0:
         raise ValueError
     s = 1.0

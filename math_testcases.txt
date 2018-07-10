@@ -171,8 +171,8 @@ erfc0117 erfc -27.6 -> 2.0
 -- special values
 lgam0000 lgamma 0.0 -> inf      divide-by-zero
 lgam0001 lgamma -0.0 -> inf     divide-by-zero
--- lgam0002 lgamma inf -> inf
--- lgam0003 lgamma -inf -> inf
+lgam0002 lgamma inf -> inf
+lgam0003 lgamma -inf -> inf
 lgam0004 lgamma nan -> nan
 
 -- negative integers
@@ -274,17 +274,17 @@ lgam0161 lgamma -2.457024738 -> 3.3464637541912932e-10
 ---------------------------
 
 -- special values
--- gam0000 gamma 0.0 -> inf        divide-by-zero
--- gam0001 gamma -0.0 -> -inf      divide-by-zero
--- gam0002 gamma inf -> inf
--- gam0003 gamma -inf -> nan       invalid
--- gam0004 gamma nan -> nan
+gam0000 gamma 0.0 -> inf        divide-by-zero
+gam0001 gamma -0.0 -> -inf      divide-by-zero
+gam0002 gamma inf -> inf
+gam0003 gamma -inf -> nan       invalid
+gam0004 gamma nan -> nan
 
 -- negative integers inputs are invalid
--- gam0010 gamma -1 -> nan         invalid
--- gam0011 gamma -2 -> nan         invalid
--- gam0012 gamma -1e16 -> nan      invalid
--- gam0013 gamma -1e300 -> nan     invalid
+gam0010 gamma -1 -> nan         invalid
+gam0011 gamma -2 -> nan         invalid
+gam0012 gamma -1e16 -> nan      invalid
+gam0013 gamma -1e300 -> nan     invalid
 
 -- small positive integers give factorials
 gam0020 gamma 1 -> 1
