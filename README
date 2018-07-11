@@ -1,7 +1,7 @@
 Gosper's continued fractions for Python, using lazy evaluation.
 
 Author:
-Marcin Ciura <Marcin.Ciura at polsl.pl>
+Marcin Ciura <mciura at gmail.pl>
 
 Web references:
 * Ralph William Gosper, Continued Fractions. In: HAKMEM,
