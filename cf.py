@@ -18,6 +18,9 @@ Web references:
   Continued fractions from Euclid to the present day,
   http://citeseer.ist.psu.edu/flajolet00continued.html
 
+Started by Marcin Ciura <mciura at gmail.pl> 01.03.2007
+- supports Python 2.4 math functions
+
 Changed by Adam Przybyla <adam@ertel.com.pl> 07.09.2011
 - added Python 2.6 math compatibility functions: 
 - ldexp(x,y) frexp(x) fsum(x) isnan(x) isinf(x) atanh(x) copysign(x,y) log3p(x) trunc(x) acosh(x) asinh(x) factorial(x)
